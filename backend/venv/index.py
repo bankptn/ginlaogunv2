@@ -20,6 +20,7 @@ def home():
 
 # Create Account
 @app.route('/account',methods=["POST"])
+@cross_origin()
 def createAccount():
     ssn = request.form['ssn']
     fname = request.form['fname']
@@ -36,6 +37,7 @@ def createAccount():
 
 # Read Account
 @app.route('/account/<ssn>',methods=["GET"])
+@cross_origin()
 def readAccount(ssn=None):
     if ssn != None:
         log = Account.read(ssn)
@@ -43,12 +45,14 @@ def readAccount(ssn=None):
 
 # Get All Account
 @app.route('/account',methods=["GET"])
+@cross_origin()
 def getAllAccount():
     log = Account.getAllAccount()
     return jsonify(log)
 
 # Update Account
 @app.route('/account',methods=["PUT"])
+@cross_origin()
 def updateAccount():
     ssn = request.form['ssn']
     fname = request.form['fname']
@@ -65,12 +69,14 @@ def updateAccount():
 
 # Delete Account
 @app.route('/accountDel/<ssn>',methods=["DELETE"])
+@cross_origin()
 def deleteAccount(ssn):
     log = Account.delete(ssn)
     return jsonify(log)
 
 # Register
 @app.route('/register', methods=["POST"])
+@cross_origin()
 def register():
     ssn = request.form['ssn']
     fname = request.form['fname']
@@ -87,6 +93,7 @@ def register():
 
 # Login
 @app.route('/login', methods=["POST"])
+@cross_origin()
 def login():
     username = request.form['username']
     password = request.form['password']
@@ -96,6 +103,7 @@ def login():
 
 # Create restaurant
 @app.route('/restaurant', methods=["POST"])
+@cross_origin()
 def createRestaurant():
     rid = request.form['rid']
     detail = request.form['detail']
@@ -108,6 +116,7 @@ def createRestaurant():
 
 # Read restaurant
 @app.route('/restaurant/<rid>', methods=["GET"])
+@cross_origin()
 def readRestaurant(rid=None):
     if rid != None:
         log = Restaurant.read(rid)
@@ -121,6 +130,7 @@ def getAllRestaurant():
 
 # Update restaurant
 @app.route('/restaurant', methods=["PUT"])
+@cross_origin()
 def updateRestaurant():
     rid = request.form['rid']
     detail = request.form['detail']
@@ -133,6 +143,7 @@ def updateRestaurant():
 
 # Delete restaurant
 @app.route('/restaurantDel/<rid>', methods=["DELETE"])
+@cross_origin()
 def deleteRestaurant(rid):
     log = Restaurant.delete(rid)
     return jsonify(log)
@@ -140,6 +151,7 @@ def deleteRestaurant(rid):
 
 # Create address restaurant
 @app.route('/raddress', methods=["POST"])
+@cross_origin()
 def createRestaurantAddress():
     rid = request.form['rid']
     street = request.form['street']
@@ -152,6 +164,7 @@ def createRestaurantAddress():
 
 # Read address restaurant
 @app.route('/raddress/<rid>', methods=["GET"])
+@cross_origin()
 def readRestaurantAddress(rid=None):
     if rid != None:
         log = RAddress.read(rid)
@@ -159,12 +172,14 @@ def readRestaurantAddress(rid=None):
 
 # Get all address restaurant
 @app.route('/raddress', methods=["GET"])
+@cross_origin()
 def getAllRestaurantAddress():
     log = RAddress.getAllRestaurant()
     return jsonify(log)
 
 # Update address restaurant
 @app.route('/raddress', methods=["PUT"])
+@cross_origin()
 def updateRestaurantAddress():
     rid = request.form['rid']
     street = request.form['street']
@@ -177,12 +192,14 @@ def updateRestaurantAddress():
 
 # Delete address restaurant
 @app.route('/raddressDel/<rid>', methods=["DELETE"])
+@cross_origin()
 def deleteRestaurantAddress(rid):
     log = RAddress.delete(rid)
     return jsonify(log)
 
 # Create reservation
 @app.route('/reservation', methods=["POST"])
+@cross_origin()
 def createreservation():
     ssn = request.form['ssn']
     rid = request.form['rid']
@@ -195,12 +212,14 @@ def createreservation():
 
 # Get all reservation
 @app.route('/reservation', methods=["GET"])
+@cross_origin()
 def getAllreservation():
     log = Reservation.getAllReservation()
     return jsonify(log)
 
 # Read reservation 
 @app.route('/getreservation', methods=["GET"])
+@cross_origin()
 def readreservation():
     rid = request.args.get('rid')
     ssn = request.args.get('ssn')
@@ -210,6 +229,7 @@ def readreservation():
 
 # Update reservation
 @app.route('/reservation', methods=["PUT"])
+@cross_origin()
 def updatereservation():
     ssn = request.form['ssn']
     rid = request.form['rid']
@@ -222,6 +242,7 @@ def updatereservation():
 
 # Delete reservation
 @app.route('/reservationDel/<rid>', methods=["DELETE"])
+@cross_origin()
 def deletereservation(rid):
     rid = request.args.get('rid')
     ssn = request.args.get('ssn')
