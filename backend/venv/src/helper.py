@@ -11,3 +11,15 @@ def initDatabase():
 
 def increaseID():
     pass
+
+def fetch(code):
+    with engine.connect() as con:
+        result = con.execute(code)
+    
+    return result
+
+def cursortorow(result):
+    temp = []
+    for row in result:
+        temp.append(row)
+    return temp

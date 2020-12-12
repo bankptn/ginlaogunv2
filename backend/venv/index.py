@@ -128,6 +128,12 @@ def getAllRestaurant():
     log = Restaurant.getAllRestaurant()
     return jsonify(log)
 
+@app.route('/getRemainTable/<rid>', methods=["GET"])
+def getRemainTable(rid):
+    if rid != None:
+        log = Restaurant.getTableRemaiByRid(rid)
+        return jsonify(log)
+
 # Update restaurant
 @app.route('/restaurant', methods=["PUT"])
 @cross_origin()
