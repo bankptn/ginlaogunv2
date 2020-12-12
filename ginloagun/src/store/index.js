@@ -103,5 +103,15 @@ export default new Vuex.Store({
         dispatch({ type: 'dialog', state: true, msg: result.data.msg })
       }
     },
+    async reserve ({ commit, dispatch }, { ssn, rid, createDate, tableAmount, detail }) {
+      commit("SET_LOADING_STATE", true)
+      var result = await api.createReservation({ ssn, rid, createDate, tableAmount, detail })
+      if (result.data.status == "1") {
+        commit("SET_LOADING_STATE", false)
+      } else {
+        commit("SET_LOADING_STATE", false)
+        dispatch({ type: 'dialog', state: true, msg: result.data.msg })
+      }
+    },
   },
 })

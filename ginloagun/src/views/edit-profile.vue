@@ -39,8 +39,11 @@
                             label="Regular"
                             placeholder="First Name"
                             v-model=account.fname
+                            :counter="15"
+                            :rules="nameRules"
                             solo
                             name="fname"
+                            required
                         />
                     </v-col>
                     <v-col cols="3">
@@ -49,6 +52,9 @@
                             label="Regular"
                             placeholder="Last Name"
                             v-model=account.lname
+                            :counter="15"
+                            :rules="FnameRules"
+                            required
                             solo
                             name="lname"
                         />
@@ -60,9 +66,9 @@
                             placeholder="ID Card Number"
                             v-model=account.ssn
                             :rules="[rules.required, rulesssn.ssn]"
+                            :counter="13"
                             solo
                             name="ssn"
-                            readonly
                             disabled
                         />
                     </v-col>
@@ -76,7 +82,6 @@
                             v-model=account.birthDay
                             solo
                             name="birthDay"
-                            readonly
                             disabled
                         />
                     </v-col>
@@ -86,6 +91,9 @@
                             label="Regular"
                             placeholder="Address"
                             v-model=account.address
+                            :counter="50"
+                            :rules="addressRules"
+                            required
                             solo
                             name="address"
                         />
@@ -97,6 +105,7 @@
                             placeholder="Tel."
                             v-model=account.phoneNumber
                             :rules="[rules.required, rulestel.tel]"
+                            :counter="10"
                             solo
                             name="phoneNumber"
                         />
@@ -110,6 +119,7 @@
                             placeholder="E-Mail"
                             v-model=account.email
                             :rules="[rules.required, rules.email]"
+                            :counter="30"
                             solo
                             name="email"
                             
@@ -123,6 +133,7 @@
                             v-model=account.username
                             solo
                             name="username"
+                            disabled
                         />
                     </v-col>
                     <v-col cols="3">
@@ -225,23 +236,47 @@ import { server } from "../service/constants"
 export default {
     name:"edit",
     
-    data() {
-        return {
+    data: vm => ({
+            date: new Date().toISOString().substr(0, 10),
+            dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+            menu1: false,
+            menu2: false,
             repassword: '',
+            name: '',
+            nameRules: [
+                v => !!v || 'First Name is required',
+                v => (v && v.length <= 15) || 'Name must be less than 10 characters',
+            ],
+            Fname: '',
+            FnameRules: [
+                v => !!v || 'Last Name is required',
+                v => (v && v.length <= 15) || 'Name must be less than 10 characters',
+            ],
+            address: '',
+            addressRules: [
+                v => !!v || 'Address is required',
+                v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+            ],
+            username: '',
+            usernameRules: [
+                v => !!v || 'Username is required',
+                v => (v && v.length <= 15) || 'Name must be less than 15 characters',
+            ],
+            
             account: 
-            {
-                ssn:"",
-                fname:"",
-                lanme:"",
-                username:"",
-                password:"",
-                address:"",
-                email:"",
-                phoneNumber:"",
-                birthDay:""
-            },
-                rules: {
-            required: value => !!value || 'Required.',
+                {
+                    ssn:"",
+                    fname:"",
+                    lanme:"",
+                    username:"",
+                    password:"",
+                    address:"",
+                    email:"",
+                    phoneNumber:"",
+                    birthDay:""
+                },
+            rules: {
+            required: value => !!value || 'ID Card Number is required',
             counter: value => value.length <= 30 || 'Max 30 characters',
             email: value => {
                 const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -249,7 +284,7 @@ export default {
                 },
                 },
                 rulestel: {
-            required: value => !!value || 'Required.',
+            required: value => !!value || 'Tel is required',
             counter: value => value.length <= 10 || 'Max 10 characters',
             tel: value => {
                 const pattern = /^[0-9]{10}$/
@@ -257,7 +292,7 @@ export default {
                 },
                 },
                 rulesssn: {
-            required: value => !!value || 'Required.',
+            required: value => !!value || 'E-Mail is required',
             counter: value => value.length <= 13 || 'Max 13 characters',
             ssn: value => {
                 const pattern = /^[0-9]{13}$/
@@ -265,18 +300,27 @@ export default {
                 },
                 },
                 show1: false,
-                show2: true,
-                show3: false,
-                show4: false,
+                show2: false,
+                
                 password: 'Password',
                 rulespass: {
                 required: value => !!value || 'Required.',
                 min: v => v.length >= 8 || 'Min 8 characters',
                 },
             valid: true,
-            passSame: true
-        }
-    },
+            passSame: true,
+        }),
+
+        computed: {
+        computedDateFormatted () {
+            return this.formatDate(this.date)
+        },
+        },
+        watch: {
+        date () {
+            this.dateFormatted = this.formatDate(this.date)
+        },
+        },
     async mounted () {
         var userID = localStorage.getItem(server.USERNAME)
         var result = await api.reprofile(userID)
@@ -325,7 +369,20 @@ export default {
             } else {
               this.passSame = true
             }
-        }
+        },
+        formatDate (date) {
+            if (!date) return null
+
+            const [year, month, day] = date.split('-')
+            return `${month}/${day}/${year}`
+        },
+        parseDate (date) {
+            if (!date) return null
+
+            const [month, day, year] = date.split('/')
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+        },
+        
     }
 }
 </script>

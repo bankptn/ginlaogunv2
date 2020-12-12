@@ -91,13 +91,41 @@
                 <v-row>
                     <v-col cols="4">
                         <label>Date of Birth</label>
-                        <v-text-field
+                        <!-- <v-text-field
                             label="Regular"
                             placeholder="Date of Birth"
                             v-model=account.birthDay
                             solo
                             name="birthDay"
-                        />
+                        /> -->
+                        <v-menu
+                            ref="menu1"
+                            v-model="menu1"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            offset-y
+                            max-width="290px"
+                            min-width="290px"
+                            >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                
+                                    label="Regular"
+                                    placeholder="Date of Birth"
+                                    v-model="dateFormatted"
+                                    solo
+                                    name="birthDay"
+
+                                    hint="MM/DD/YYYY format"
+                                    persistent-hint
+                                    v-bind="attrs"
+                                    @blur="date = parseDate(dateFormatted)"
+                                    v-on="on"
+                                    readonly
+                                ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+                            </v-menu>
                         
                     </v-col>
                     <v-col cols="5">
@@ -190,9 +218,8 @@
                 <v-row justify="end" align="center">
                     <v-btn style="background-color: red; border-radius: 20px;" type="submit"
                         :disabled="!valid"
-                        
                         class="mr-4"
-                        @click="signup">
+                        >
                         
                         Sign Up
                     </v-btn>
@@ -229,9 +256,11 @@
 
 <script>
 export default {
-    name:"Signup",
-    data() {
-        return {
+        data: vm => ({
+            date: new Date().toISOString().substr(0, 10),
+            dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+            menu1: false,
+            menu2: false,
             repassword: '',
             name: '',
             nameRules: [
@@ -291,38 +320,50 @@ export default {
                 },
                 },
                 show1: false,
-                show2: true,
-                show3: false,
-                show4: false,
+                show2: false,
+                
                 password: 'Password',
                 rulespass: {
                 required: value => !!value || 'Required.',
                 min: v => v.length >= 8 || 'Min 8 characters',
                 },
             valid: true,
-            passSame: true
-        }
-    },
+            passSame: true,
+        }),
+
+        computed: {
+        computedDateFormatted () {
+            return this.formatDate(this.date)
+        },
+        },
+        watch: {
+        date () {
+            this.dateFormatted = this.formatDate(this.date)
+        },
+        },
+    name:"Signup",
+    
     methods: {
         onClickProfile () {
             this.$router.push({name:"refeel"})
         },
-        signup () {
-            this.$refs.form.signup()
-        },
         submitRegister () {
-            this.$store.dispatch({ 
-                type: "register",
-                ssn : this.account.ssn,
-                fname : this.account.fname,
-                lname : this.account.lname,
-                username : this.account.username,
-                password : this.account.password,
-                address : this.account.address,
-                email : this.account.email,
-                phoneNumber : this.account.phoneNumber,
-                birthDay : this.account.birthDay,
-            })
+            var state = this.$refs.form.validate()
+            if (state) {
+                this.account.birthDay = this.dateFormatted
+                this.$store.dispatch({ 
+                    type: "register",
+                    ssn : this.account.ssn,
+                    fname : this.account.fname,
+                    lname : this.account.lname,
+                    username : this.account.username,
+                    password : this.account.password,
+                    address : this.account.address,
+                    email : this.account.email,
+                    phoneNumber : this.account.phoneNumber,
+                    birthDay : this.account.birthDay,
+                })
+            }
         },
         validate: function() {
             if (this.account.password !== this.repassword) {
@@ -331,8 +372,20 @@ export default {
             } else {
               this.passSame = true
             }
-        }
-    },
+        },
+        formatDate (date) {
+            if (!date) return null
+
+            const [year, month, day] = date.split('-')
+            return `${month}/${day}/${year}`
+        },
+        parseDate (date) {
+            if (!date) return null
+
+            const [month, day, year] = date.split('/')
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+        },
+        },
 }
 
 

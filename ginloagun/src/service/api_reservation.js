@@ -2,6 +2,7 @@ import httpClient from "@/service/httpClient";
 import { server } from "@/service/constants";
 
 export const createReservation = async (values) => {
+    console.log(values)
     var bodyFormData = new FormData();
     bodyFormData.append("ssn", values.ssn);
     bodyFormData.append("rid", values.rid);
