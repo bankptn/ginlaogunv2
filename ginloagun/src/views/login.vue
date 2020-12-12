@@ -1,237 +1,191 @@
 <template>
-  <header>
-        <nav>
-            <div class="bar"></div>
-        </nav>
-        <div class="container">
-            <div class="logo">
-                <div class="navlogo"></div>
-                <a href="#">
-                    <img src="../assets/Group 9.svg" alt="GinLaoGun" width="500" height="100" id="bc">
-                </a>
+  <v-container fluid class="main" id="login">
+        <v-row justify="center" align="center">
+            <v-form
+                class="cardTitle"
+            >
+            <div class="titlebg">
+                <v-img
+                    src="../assets/Group 9.svg"
+                    contain
+                    height="100px"
+                    width="300px"
+                />
             </div>
-            <section class="background">
-                <section>
-                    <br>
-                    <section class="top">
-                        <h2>Sign In</h2>
-                    </section>
-                    <br>
-                    <!-- <form method="post">
-                        {% csrf_token %}
-                        {form} -->
-                        <form id='form_login' action='/'>
-                        <!-- {% csrf_token %} -->
-                            <section class="username">
-                                <div class="username-title">
-                                    <h1>Username</h1>
-                                </div>
-                                <section class="usernamebox">
-                                    <input type='text' id='txt_Username' name='username' class='form-control' placeholder='Username'>
-                                </section>
-                            </section>
-                            <br>
-                            <section class="password">
-                                <div class="password-title">
-                                    <h1>Password</h1>
-                                </div>
-                                <section class="passwordbox">
-                                    <input type='password' id='txt_Password' name='password' class='form-control' placeholder='Password'>
-                                </section>
-                            </section>
-                            <section>
-                                <div class="create">
-                                    <h1>New user?<a href="#" id="create">create an account</a></h1>
-                                    
-                                    <h1>Forget password?</h1>
-                                </div>
-                            </section>
-                            <br>
-                            <section>
-                                <div class="signin-btn">
-                                    <a href="#" id="signin-btn" class="signin">Sign In</a>
-                                    
-                                        <!-- <input type="submit" id="signin-btn" value="Sign In">
-                                     -->
-                                </div>
-                            </section>
-                        </form>
-                    <!-- </form> -->
-                </section>
-            </section>
-        </div>
-    </header>
+            </v-form>
+        </v-row>
+        <v-row justify="center" align="center">
+            <v-form
+                class="cardBody"
+                ref="form"
+                v-model="valid"
+                @submit.prevent="submitLogin"
+                lazy-validation
+            >  
+                <div class="bg">
+                    <v-row>
+                        <v-col cols="10">
+                            <h1>SIGN IN</h1>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="11">
+                            <label>Username</label>
+                            <v-text-field
+                                label="Regular"
+                                placeholder="Username"
+                                v-model=account.username
+                                solo
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="11">
+                            <label>Password</label>
+                            <v-text-field
+                                label="Regular"
+                                placeholder="Password"
+                                v-model=account.password
+                                solo
+                                type="password"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="4">
+                            <h3>New User?</h3>
+                        </v-col>
+                        <v-col cols="4" class="create">
+                            <!-- <v-btn> -->
+                                <h3><a href="/signup">create account</a></h3>
+                                <!-- <h3>create account</h3> -->
+                            <!-- </v-btn> -->
+                            <!-- <v-card @click="onClickCreate" v-for="create in creates" :key="create.id" class="col">
+                                {{ create.name }}
+                            </v-card> -->
+                        </v-col>
+                        <v-col cols="4" justify="end" align="center" class="forgot">
+                            <h3><a href="#">Forgot Password?</a></h3>
+                        </v-col>
+
+                    </v-row>
+                    <v-row justify="end" align="center">
+                        <v-btn style="background-color: red; border-radius: 20px;" type="submit" >
+                            Sign In
+                        </v-btn>
+                    </v-row>
+                </div>
+            </v-form>
+        </v-row>
+        <!-- Dialog -->
+        <v-dialog
+            v-model="$store.getters.getDialogState"
+            width="500"
+            persistent
+        >
+            <v-card>
+                <v-card-title class="headline grey lighten-2">ALERT</v-card-title>
+                    <v-card-text> {{ $store.getters.getDialogMessage }} </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                            <v-btn color="primary" @click="$store.dispatch({ type: 'dialog', state: false, msg:'' })">
+                                ok
+                            </v-btn>
+                    </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <!-- Loading -->
+        <v-overlay :value="$store.getters.getLoadingDialog">
+            <v-progress-circular indeterminate size="64"/>
+        </v-overlay>
+    </v-container>
 </template>
 
 <script>
 export default {
-
+name: "login",
+    data() {
+        return {
+            valid: true,
+            creates:[
+                {
+                    id:"1",
+                    name:"create an account",
+                }
+            ],
+            account:{
+                username: "",
+                password: ""
+            }
+        }
+    },
+    methods: {
+        onClickCreate () {
+            this.$router.push({name:"Signup"})
+        },
+        submitLogin () {
+            this.$store.dispatch({ 
+                type: "login",
+                username : this.account.username,
+                password : this.account.password,
+            })
+        }
+    },
 }
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
+<style scoped>
+.main {
+    min-height: 100vh;
+    background: url(../assets/home.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 145%;
 }
-
-.container {
-    max-width: 1520px;
-    max-height: 740px;
-    margin: 0 auto;
-}
-
-header {
-    width: 1536px;
-    height: 753px;
-    background: url(../assets/home.svg) no-repeat;
-}
-
-.bar {
-    height: 38px;
-}
-
-.logo .navlogo {
-    height: 10px;
-}
-
-.logo {
-    margin-top: 0px;
-    margin-left: 518px;
-    width: 500px;
-    height: 120px;
-    left: 629px;
-    top: 38px;
-
+.titlebg {
     background: #454545;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 50px;
-}
-
-.background {
-    margin-top: 30px;
-    margin-left: 348px;
-    width: 540px;
     
-    width: 833px;
-    height: 540px;
-    left: 543px;
-    top: 300px;
-    /* border: 1px solid red; */
+}
+.cardTitle{
+    margin-top: 80px;
+    margin-bottom: 20px;
+    background-color: #454545;
+    border-radius: 30px;
     display: flex;
-
-    background: #454545;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
-    border-radius: 20px;
-}
-
-.usernamebox input{
-    margin-top: 25px;
-    margin-left: 47.5px;
-
-    width: 740px;
-    height: 66px;
-    left: 590px;
-    top: 489px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.passwordbox input{
-    margin-top: 25px;
-    margin-left: 47.5px;
-
-    width: 740px;
-    height: 66px;
-    left: 590px;
-    top: 489px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.username-title {
-    margin-left: 47.5px;
-    text-decoration: none;
-    font-size: 36px;
-    color: white;
-    display: flex;
-    align-items: center;
-}
-
-.password-title {
-    margin-left: 47.5px;
-    text-decoration: none;
-    font-size: 36px;
-    color: white;
-    display: flex;
-    align-items: center;
-}
-
-.top {
-    margin-left: 47.5px;
-    text-decoration: none;
-    font-size: 36px;
-    color: white;
-    display: flex;
-    align-items: center;
-}
-
-.create {
-    display: flex;
-    justify-content: space-between;
-}
-
-.create h1 {
-    margin-left: 47.5px;
-    text-decoration: none;
-    font-size: 24px;
-    color: white;
-    display: flex;
-    align-items: center;
-}
-
-.create a {
-    margin-left: 47.5px;
-    display: flex;
-    align-items: center;
-    font-size: 24px;
-    line-height: 35px;
-    text-decoration: none;
-
-    color: #8DEF84;
-
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
-.signin-btn a{
-    margin-left: 268px;
-
-    text-align: center;
-    width: 250px;
-    height: 80px;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    
-
-    background: #95E7EE;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 50px;
-    color: black;
+    align-items: center;
+}
+.cardBody {
+    margin-top: 10px;
+    background-color: #454545;
+    border-radius: 30px;
+    padding: 20px;
+    /* height: 100%;
+    width: 60%; */
+    /* justify-content: ; */
+    justify-content: center;
+    align-items: center;
+    min-width: 700px;
+    min-height: 450px;
+}
+.bg {
+    background-color: #454545;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+}
+label, h3, h1 {
+    color: white;
+}
+.create a{
     text-decoration: none;
-    display: inline-block;
-    font-size: 48px;
+    color: #8DEF84;
+}
+
+.forgot a{
+    text-decoration: none;
+    color: cyan;
 }
 </style>
