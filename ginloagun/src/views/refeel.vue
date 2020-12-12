@@ -11,6 +11,8 @@
                     <v-row>
                         <v-card style=" border-radius: 20px; background-color: white;" @click="onClick" class="inf">
                             <h2>Information</h2>
+                            <h4>{{ restarunt.name }}</h4>
+                            <h4>{{ restarunt.maxTable }}</h4>
                         </v-card>
                     </v-row>
                     <br>
@@ -42,7 +44,7 @@
                     </v-row>
                     <br>
                     <v-row>
-                        <v-card style=" border-radius: 20px;" @click="onClickTable" class="table">
+                        <v-card style=" border-radius: 20px;" @click="onClickTable(restarunt.rid)" class="table">
                             <h2>Reserve Table</h2>
                         </v-card>
                     </v-row>
@@ -56,14 +58,36 @@
 </template>
 
 <script>
+import api from "../service/api"
 export default {
     name: "refeel",
+    data() {
+        return {
+            rid: "",
+            restarunt: {
+                rid: "",
+                name: "",
+                maxTable: ""
+            }
+        }
+    },
+    async mounted() {
+        this.rid = this.$route.query.rid
+        var result = await api.getRestarunt(this.rid)
+        if (result.data.status == "1") {
+            this.restarunt.rid = result.data.result.rid
+            this.restarunt.name = result.data.result.name
+            this.restarunt.maxTable = result.data.result.tableRemain
+        } else {
+            this.$router.push({name:"home"})
+        }
+    },
     methods: {
         onClick (){
             this.$router.push({name:"Signup"})
         },
-        onClickTable (){
-            this.$router.push({name:"reserve"})
+        onClickTable (rid){
+            this.$router.push({name:"reserve", query:{rid: rid}})
         }
     }
 }

@@ -5,7 +5,7 @@
                 class="cardBody"
             >
                 <div class="tableCol">
-                    <v-card style=" border-radius: 30px;" @click="onClickBar" v-for="bar in bars" :key="bar.id" class="colCard">
+                    <v-card style=" border-radius: 30px;" @click="onClickBar(bar.rid)" v-for="bar in bars" :key="bar.rid" class="colCard">
                         {{ bar.name }}
                     </v-card>
                 </div>
@@ -15,35 +15,23 @@
 </template>
 
 <script>
+import api from "../service/api"
 export default {
     name: "Home",
     data() {
         return {
-            bars:[
-                {
-                    id:"1",
-                    name:"Refeel Bar & Bistro",
-                },
-                {
-                    id:"2",
-                    name:"C-minor",
-                },
-                {
-                    id:"3",
-                    name:"Zyn music bar & hashery",
-                },
-                {
-                    id:"4",
-                    name:"2gether bar & restaurant",
-                }
-            ]
+            bars:[]
         }
     },
     methods: {
-        onClickBar () {
-            this.$router.push({name:"refeel"})
+        onClickBar (rid) {
+            this.$router.push({name:"refeel", query:{rid: rid}})
         }
     },
+    async mounted() {
+        var result = await api.getAllRestarunt()
+        this.bars = result.data.result
+    }
 }
 </script>
 

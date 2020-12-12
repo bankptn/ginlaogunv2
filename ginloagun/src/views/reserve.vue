@@ -194,23 +194,20 @@ export default {
     },
 
     async mounted() {
-        const result = await api.getRemainTableByrid("r000000003")
-        if (result.data !== null) {
+        this.reservation.rid = this.$route.query.rid
+        const result = await api.getRemainTableByrid(this.reservation.rid)
+        if (result.data.result !== "1") {
             this.restaurant.rid = result.data.result.rid
             this.restaurant.name = result.data.result.name
             this.restaurant.remainTable = result.data.result.remainTable
+        } else {
+            this.$router.push({name:"home"})
         }
     },
     methods: {
-        onClickSubmit() {
-            console.log()
-            this.$router.push({name:"refeel"})
-        },
         submitReserve (){
             this.reservation.createDate = this.dateFormatted + " " + this.time
             this.reservation.ssn = localStorage.getItem(server.USERNAME)
-            this.reservation.rid = "r000000003"
-            console.log(this.reservation)
             this.$store.dispatch({ 
                 type: "reserve",
                 ssn : this.reservation.ssn,

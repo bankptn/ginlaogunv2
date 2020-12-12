@@ -16,13 +16,13 @@
                     </v-col>
                     <v-col class="logoTitle" cols="6">
                         <div>
-                            <v-card style="border-radius: 360px; min-width: 58px; min-height: 58px;">
-                            <v-img
-                                src="../assets/user 1.svg"
-                                height="150px"
-                                width="150px"
-                                contain
-                            />
+                            <v-card style=" min-width: 58px; min-height: 58px;">
+
+                                
+                                <v-card >
+                                    <v-img max-width="400" :src='account.pic' lazy-src='../assets/user 1.svg'> </v-img>
+                                </v-card>
+                            
                             </v-card>
                         </div>
                     </v-col>
@@ -176,13 +176,14 @@ export default {
             {
                 ssn:"",
                 fname:"",
-                lanme:"",
+                lname:"",
                 username:"",
                 password:"",
                 address:"",
                 email:"",
                 phoneNumber:"",
-                birthDay:""
+                birthDay:"",
+                pic:""
             },
             valid: true
         }
@@ -190,7 +191,6 @@ export default {
     async mounted () {
         var userID = localStorage.getItem(server.USERNAME)
         var result = await api.reprofile(userID)
-        console.log(result)
         if (result.data.status == "1") {
             this.account.ssn  = result.data.result.ssn
             this.account.fname  = result.data.result.fname
@@ -201,9 +201,13 @@ export default {
             this.account.email  = result.data.result.email
             this.account.phoneNumber  = result.data.result.phoneNumber
             this.account.birthDay  = result.data.result.birthDay
-            
-
+            this.account.pic  = result.data.result.pic
         }
+
+        if (this.account.pic === "") {
+            this.account.pic = "../assets/user 1.svg"
+        }
+        console.log(this.account)
     },
 }
 </script>

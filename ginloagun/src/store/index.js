@@ -83,9 +83,9 @@ export default new Vuex.Store({
       commit("SET_DIALOG_STATE", state)
       commit("SET_DIALOG_MESSAGE", msg)
     },
-    async register ({ commit, dispatch }, { ssn, fname, lname, username, password, address, email, phoneNumber, birthDay }) {
+    async register ({ commit, dispatch }, { ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, pic }) {
       commit("SET_LOADING_STATE", true)
-      var result = await api.register({ ssn, fname, lname, username, password, address, email, phoneNumber, birthDay })
+      var result = await api.register({ ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, pic })
       if (result.data.status == "1") {
         commit("SET_LOADING_STATE", false)
       } else {
@@ -93,9 +93,9 @@ export default new Vuex.Store({
         dispatch({ type: 'dialog', state: true, msg: result.data.msg })
       }
     },
-    async editprofile ({ commit, dispatch }, { ssn, fname, lname, username, password, address, email, phoneNumber, birthDay }) {
+    async editprofile ({ commit, dispatch }, { ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, pic }) {
       commit("SET_LOADING_STATE", true)
-      var result = await api.editprofile({ ssn, fname, lname, username, password, address, email, phoneNumber, birthDay })
+      var result = await api.editprofile({ ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, pic })
       if (result.data.status == "1") {
         commit("SET_LOADING_STATE", false)
       } else {

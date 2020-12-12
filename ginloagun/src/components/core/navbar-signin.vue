@@ -35,8 +35,8 @@
           <span>Account</span>
         </v-btn>
         <div class="dropdown-account">
-            <a><span @click="onClickProfile">Profile</span></a>
-            <a><span @click="onClickEdit">Edit Profile</span></a>
+            <a><span @click="onClickProfile()">Profile</span></a>
+            <a><span @click="onClickEdit()">Edit Profile</span></a>
             <a><span @click="onClickLogout()">Sign Out</span></a>
         </div>
       </div>

@@ -32,6 +32,7 @@ export const register = async (values) => {
   bodyFormData.append("email", values.email);
   bodyFormData.append("phoneNumber", values.phoneNumber);
   bodyFormData.append("birthDay", values.birthDay);
+  bodyFormData.append("pic", values.pic);
   var result = await httpClient.post(server.REGISTER, bodyFormData);
   return result
 };
@@ -47,6 +48,8 @@ export const editprofile = async (values) => {
   bodyFormData.append("email", values.email);
   bodyFormData.append("phoneNumber", values.phoneNumber);
   bodyFormData.append("birthDay", values.birthDay);
+  bodyFormData.append("pic", values.pic);
+  
   var result = await httpClient.put(server.ACCOUNT, bodyFormData);
   return result
 };

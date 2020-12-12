@@ -15,14 +15,9 @@
                         <h1>EDIT PROFILE</h1>
                     </v-col>
                     <v-col class="logoTitle" cols="6">
-                        <v-card @click="onClickProfile" style="border-radius: 360px; min-width: 58px; min-height: 58px;">
+                        <v-card @click="onClickModal" style="border-radius: 360px; min-width: 58px; min-height: 58px;">
                         <div>
-                            <v-img
-                                src="../assets/user 1.svg"
-                                height="150px"
-                                width="150px"
-                                contain
-                            />
+                            <v-img max-width="400" :src='account.pic' lazy-src='../assets/user 1.svg'> </v-img>
                         </div>
                         </v-card>
                     </v-col>
@@ -273,7 +268,8 @@ export default {
                     address:"",
                     email:"",
                     phoneNumber:"",
-                    birthDay:""
+                    birthDay:"",
+                    pic:"",
                 },
             rules: {
             required: value => !!value || 'ID Card Number is required',
@@ -335,8 +331,7 @@ export default {
             this.account.email  = result.data.result.email
             this.account.phoneNumber  = result.data.result.phoneNumber
             this.account.birthDay  = result.data.result.birthDay
-            
-
+            this.account.pic  = result.data.result.pic
         }
     },
     
@@ -360,8 +355,25 @@ export default {
                 email : this.account.email,
                 phoneNumber : this.account.phoneNumber,
                 birthDay : this.account.birthDay,
+                pic: this.account.pic
             })
         },
+        onClickModal() {
+            window.cloudinary.openUploadWidget(
+                {
+                cloud_name: "drfushcub",
+                upload_preset: "ginlaogun_img",
+                },
+                (error, result) => {
+                if (!error && result.event === "success") {
+                    console.log("Done uploading.... : ", result.info);
+                    console.log("here is your pic! : ", result.info.url);
+                    this.account.pic = result.info.url;
+                    console.log("ควายแม๊ก", this.account.pic);
+                }
+                }
+            );
+            },
         validate: function() {
             if (this.account.password !== this.repassword) {
                 this.$store.dispatch({ type: 'dialog', state: true, msg: "Your Password doesn't match!" })
