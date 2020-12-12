@@ -91,6 +91,26 @@ class Restaurant():
         }
         return log
 
+    def getTableRemaiByRid(self, rid):
+        rid = "'"+rid+"'"
+        result = fetch(' SELECT r.rid, r.name, r."tableRemain" - l."totalTable" as "tableRemain"    \
+                FROM "RESTAURANT" r, (  SELECT r.rid, SUM(r."tableAmount") as "totalTable"          \
+					                    FROM "RESERVATION" r                                        \
+					                    GROUP BY rid ) l                                             \
+                WHERE r.rid = l.rid AND r.rid = {}'.format(rid))
+        temp = cursortorow(result)
+        result = {
+            "rid":temp[0][0],
+            "name":temp[0][1],
+            "remainTable":temp[0][2]
+        }
+        log = {
+            "result":result,
+            "msg":"",
+            "status":"1"
+        }
+        return log
+
     def serialize(self, object):
         return {
             'rid': object.rid,
