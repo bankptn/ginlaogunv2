@@ -156,4 +156,5 @@ class Account():
             'address': customer.address,
             'email': customer.email,
             'phoneNumber': customer.phoneNumber,
+            'birthDay': customer.birthDay,
         }

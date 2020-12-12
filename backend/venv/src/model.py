@@ -36,6 +36,6 @@ class RESERVATION(Base):
     __tablename__ = 'RESERVATION'
     ssn = Column('ssn', ForeignKey('ACCOUNT.ssn') ,primary_key=True)
     rid = Column('rid', ForeignKey('RESTAURANT.rid') ,primary_key=True)
-    createDate = Column('createDate', sa.String(15) )
+    createDate = Column('createDate', sa.String(15) ,primary_key=True)
     tableAmount = Column('tableAmount', sa.Integer() )
     detail = Column('detail', sa.String(50) )
