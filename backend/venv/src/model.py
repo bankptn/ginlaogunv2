@@ -14,7 +14,7 @@ class ACCOUNT(Base):
     address = Column('address', sa.String(50) )
     email = Column('email', sa.String(30) )
     phoneNumber = Column('phoneNumber', sa.String(15) )
-    birthDay = Column('birthDay', sa.String(15) )
+    birthDay = Column('birthDay', sa.String(20) )
 
 class RESTAURANT(Base):
     __tablename__ = 'RESTAURANT'
