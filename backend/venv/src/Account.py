@@ -1,7 +1,6 @@
-from .model import *
+from .model import ACCOUNT
 from .helper import *
 from sqlalchemy import func 
-
 
 session = initDatabase()
 
@@ -21,6 +20,7 @@ class Account():
         account = session.query(ACCOUNT)
         account = account.filter(ACCOUNT.ssn==ssn)
         if account.scalar() is not None :
+            print(account.one())
             account = self.serialize(account.one())
             log = {
                 "result":account,
