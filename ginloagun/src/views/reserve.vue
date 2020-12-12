@@ -8,6 +8,9 @@
                 <v-row>
                     <v-col cols="8" class="map">
                         <v-img src="../assets/Refeel ผังร้าน 2.svg" alt="refeel" contain />
+
+                        <p>{{ restaurant.name }}</p>
+                        <p>Table remain: {{ restaurant.remainTable }}</p>
                     </v-col>
                     <v-col cols="4">
                         <h1>Book Table</h1>
@@ -79,11 +82,29 @@
 </template>
 
 <script>
+import api from "../service/api"
 export default {
     name:"reserve",
+    data() {
+        return {
+            restaurant: {
+                rid:"",
+                name:"",
+                remainTable:""
+            }
+        }
+    },
+    async mounted() {
+        const result = await api.getRemainTableByrid("r000000003")
+        if (result.data !== null) {
+            this.restaurant.rid = result.data.result.rid
+            this.restaurant.name = result.data.result.name
+            this.restaurant.remainTable = result.data.result.remainTable
+        }
+    },
     methods: {
         onClickSubmit() {
-            console.log(),
+            console.log()
             this.$router.push({name:"refeel"})
         }
     }

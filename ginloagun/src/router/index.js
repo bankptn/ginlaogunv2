@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Signup from '../views/Signup.vue'
+import Signup from '../views/signup.vue'
 import edit from '../views/edit-profile.vue'
 import home from '../views/Home.vue'
 import CusHome from '../views/cus-home.vue'
