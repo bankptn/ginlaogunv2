@@ -1,674 +1,380 @@
 <template>
-  <header>
-        <nav>
-            <div class="bar"></div>
-        </nav>
-        <div class="wrapper">
-            <nav class="desktop-nav">
-                <div class="logo">
-                    <a href="#"  id="logo-click">
-                        <img src="{% static 'img/Logo-3.svg' %}" alt="">
-                    </a>
-                    
-                </div>
-    
-                <div class="nav">
-                    <a href="#" id="home" class="active">Home</a>
-                    <div class="dropdown">
-                        <button class="rdropbtn">Restaurants
-                            <i class="resdown"></i>
-                        </button>
-                        <div class="dropdown-res">
-                            <a href="#" id="red">Refeel Bar & Bistro</a>
-                            <a href="#" id="cd">C - minor</a>
-                            <a href="#" id="zynd">Zyn music bar & hashery</a>
-                            <a href="#" id="2getd">2gether bar & restaurant</a>
+  <v-container fluid class="main" id="edit">
+        <v-row justify="center" align="center">
+          <v-row justify="center" align="center">
+            <v-form
+                class="cardBody"
+                ref="form"
+                v-model="valid"
+                @submit.prevent="submitEdit"
+                lazy-validation
+            > 
+            <div class="mainbg">
+                <v-row> 
+                    <v-col cols="6">
+                        <h1>EDIT PROFILE</h1>
+                    </v-col>
+                    <v-col class="logoTitle" cols="6">
+                        <v-card @click="onClickProfile" style="border-radius: 360px; min-width: 58px; min-height: 58px;">
+                        <div>
+                            <v-img
+                                src="../assets/user 1.svg"
+                                height="150px"
+                                width="150px"
+                                contain
+                            />
                         </div>
+                        </v-card>
+                    </v-col>
+                    <v-col cols="12">
+                    <div class="add">
+                        <h4>Add Profile Picture</h4>
                     </div>
-                    <a href="#">About Us</a>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="3">
+                        <label>First Name</label>
+                        <v-text-field
+                            label="Regular"
+                            placeholder="First Name"
+                            v-model=account.fname
+                            solo
+                            name="fname"
+                        />
+                    </v-col>
+                    <v-col cols="3">
+                        <label>Last Name</label>
+                        <v-text-field
+                            label="Regular"
+                            placeholder="Last Name"
+                            v-model=account.lname
+                            solo
+                            name="lname"
+                        />
+                    </v-col>
+                    <v-col cols="6">
+                        <label>ID Card Number</label>
+                        <v-text-field
+                            label="Regular"
+                            placeholder="ID Card Number"
+                            v-model=account.ssn
+                            :rules="[rules.required, rulesssn.ssn]"
+                            solo
+                            name="ssn"
+                            readonly
+                            disabled
+                        />
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="4">
+                        <label>Date of Birth</label>
+                        <v-text-field
+                            label="Regular"
+                            placeholder="Date of Birth"
+                            v-model=account.birthDay
+                            solo
+                            name="birthDay"
+                            readonly
+                            disabled
+                        />
+                    </v-col>
+                    <v-col cols="5">
+                        <label>Address</label>
+                        <v-text-field
+                            label="Regular"
+                            placeholder="Address"
+                            v-model=account.address
+                            solo
+                            name="address"
+                        />
+                    </v-col>
+                    <v-col cols="3">
+                        <label>Tel.</label>
+                        <v-text-field
+                            label="Regular"
+                            placeholder="Tel."
+                            v-model=account.phoneNumber
+                            :rules="[rules.required, rulestel.tel]"
+                            solo
+                            name="phoneNumber"
+                        />
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="3">
+                        <label>E-Mail</label>
+                        <v-text-field
+                            label="Regular"
+                            placeholder="E-Mail"
+                            v-model=account.email
+                            :rules="[rules.required, rules.email]"
+                            solo
+                            name="email"
+                            
+                        />
+                    </v-col>
+                    <v-col cols="3">
+                        <label>Username</label>
+                        <v-text-field
+                            label="Regular"
+                            placeholder="Username"
+                            v-model=account.username
+                            solo
+                            name="username"
+                        />
+                    </v-col>
+                    <v-col cols="3">
+                        <label>Password</label>
+                        <v-text-field
+                            
+                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                            :rulespass="[rulespass.required, rulespass.min]"
+                            :type="show1 ? 'text' : 'password'"
+                            hint="At least 8 characters"
+                            counter
+                            @click:append="show1 = !show1"
+                            solo
+                            label="Regular"
+                            placeholder="Password"
+                            v-model=account.password
+                            name="password"
+                        />
+                    </v-col>
+                    <v-col cols="3">
+                        <label>Re-Enter Password</label>
+                        <v-text-field
+                            :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                            :rulespass="[rulespass.required, rulespass.min]"
+                            :type="show2 ? 'text' : 'password'"
+                            hint="At least 8 characters"
+                            counter
+                            @click:append="show2 = !show2"
+                            label="Regular"
+                            v-on:blur="validate"
+                            placeholder="Re-Enter Password"
+                            solo
+                            name="re-password"
+                            v-model="repassword"
+                            
+                        />
+                    </v-col>
+                </v-row>
+                <v-row class="btn" justify="end" align="center">
+                    <v-btn class="cancel" style="background-color: #ED8C8C; border-radius: 20px;">
+                        Cancel
+                    </v-btn>
+                    <v-btn class="save" style="background-color: #95E7EE; border-radius: 20px;" type="submit">
+                        Save
+                    </v-btn>
+                </v-row>
                 </div>
-    
-                <div class="bgpic">
-                    <div class="cuspic">
-                        <img src="{% static 'img/user 2.svg' %}" alt="">
-                    </div>
-                </div>
-    
-                <div class="dropdown1">
-                    <button class="cdropbtn">Customer
-                        <i class="cusdown"></i>
-                    </button>
-                    <div class="dropdown-cus">
-                        <a href="#" id="profile">Profile</a>
-                        <a href="#" id="edit">Edit profile</a>
-                        <a href="#" id="logout">Sign out</a>
-                    </div>
-                </div>
-            </nav>
-        </div>  
-        <div class="container">
-            <!-- <div class="logo">
-                <div class="navlogo"></div>
-                <a href="#">
-                    <img src="{% static 'img/Group 9.svg' %}" alt="GinLaoGun" width="450" height="100">
-                </a>
-            </div> -->
-            <section class="background">
-                <br>
-                <section class="top">
-                    <h2>Edit Profile</h2>
-                        <a href="#">
-                            <img src="../assets/user 1.svg" alt="Profile Picture" width="115" height="115">
-                        </a>
-                </section>
-                <section class="top2">
-                    <h2>Add Profile Picture</h2>
-                </section>
-                <form id='form_edit' action='/'>
-                    <section class="name">
-                        <div class="name-title">
-                            <h1>Name</h1>
-                            <input type='text' id='txt_Name' name='name' class='form-control' placeholder='Name'>
-                        </div>
-                        <div class="lastname-title">
-                            <h1>Last Name</h1>
-                            <input type='text' id='txt_LastName' name='lastname' class='form-control' placeholder='Last Name'>
-                        </div>
-                        <div class="id-title">
-                            <h1>ID Card Number</h1>
-                            <input type='text' maxlength="13" id='txt_Id' name='id' class='form-control' placeholder='ID Card Number' readonly>
-                        </div>
-                    </section>
-                    <br>
-                    <section class="birth">
-                        <div class="birth-title">
-                            <h1>Date of Birth</h1>
-                            <input type='text' id='txt_Bday' name='date' class='form-control' placeholder='Date of birth' readonly>
-                            <!-- <div class="valid-feedback">Valid.</div>
-                            <div class="invalid-feedback">Check this checkbox to continue.</div> -->
-                            <!-- <button type='button' class="btn btn-default" id='btn_BirthDay'> -->
-                                <!-- <span class="glyphicon glyphicon-calendar"></span> -->
-                            <!-- </button> -->
-                        </div>
-                        <div class="address-title">
-                            <h1>Address</h1>
-                            <input type='text' id='txt_Address' name='address' class='form-control' placeholder='Address'>
-                        </div>       
-                        <div class="tel-title">
-                            <h1>Tel.</h1>
-                            <input type='text' maxlength="10" id='txt_Tel' name='tel' class='form-control' placeholder='Tel.'>
-                        </div>
-                    </section>
-                    <br>
-                    <section class="mail">
-                        <div class="mail-title">
-                            <h1>E-mail</h1>
-                            <input type='text' id='txt_Mail' name='mail' class='form-control' placeholder='E-Mail'>
-                        </div>
-                        <div class="user-title">
-                            <h1>Username</h1>
-                            <input type='text' id='txt_User' name='user' class='form-control' placeholder='Username'>
-                        </div>
-                        <div class="pass-title">
-                            <h1>Password</h1>
-                            <input type='password' id='txt_Pass' name='pass' class='form-control' placeholder='Password'>
-                        </div>
-                        <div class="repass-title">
-                            <h1>Re-Enter Password *</h1>
-                            <input type='password' id='txt_RePass' name='repass' class='form-control' placeholder='Re-Password'>
-                        </div>
-                        </section>
-                    <br>
-                    <section>
-                        <div class="btn">
-                            <div class="cancel-btn">
-                                <a href="#" id="cancel" class="cancel">Cancel</a>
-                            </div>
-                            <div class="save-btn" id="save-btn">
-                                <a href="#" id="save" class="save">Save</a>
-                            </div>
-                        </div>
-                    </section>
-                </form>
-            </section>
+            </v-form>
+        </v-row>
+        </v-row>
+        
+        <!-- Dialog -->
+        <v-dialog
+            v-model="$store.getters.getDialogState"
+            width="500"
+            persistent
+        >
+            <v-card>
+                <v-card-title class="headline grey lighten-2">ALERT</v-card-title>
+                    <v-card-text> {{ $store.getters.getDialogMessage }} </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                            <v-btn color="primary" @click="$store.dispatch({ type: 'dialog', state: false, msg:'' })">
+                                ok
+                            </v-btn>
+                    </v-card-actions>
+            </v-card>
+        </v-dialog>
 
-        </div>
-    </header>
+        <!-- DialogPass -->
+        <v-dialog
+            v-model="$store.getters.getDialogState"
+            width="500"
+            persistent
+        >
+            <v-card>
+                <v-card-title class="headline grey lighten-2">ALERT</v-card-title>
+                    <v-card-text> {{ $store.getters.getDialogMessage }} </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                            <v-btn color="primary" @click="$store.dispatch({ type: 'dialog', state: false, msg:'' })">
+                                ok
+                            </v-btn>
+                    </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <!-- Loading -->
+        <v-overlay :value="$store.getters.getLoadingDialog">
+            <v-progress-circular indeterminate size="64"/>
+        </v-overlay>
+  </v-container>
 </template>
 
 <script>
+import api from "../service/api"
+import { server } from "../service/constants"
 export default {
+    name:"edit",
+    
+    data() {
+        return {
+            repassword: '',
+            account: 
+            {
+                ssn:"",
+                fname:"",
+                lanme:"",
+                username:"",
+                password:"",
+                address:"",
+                email:"",
+                phoneNumber:"",
+                birthDay:""
+            },
+                rules: {
+            required: value => !!value || 'Required.',
+            counter: value => value.length <= 30 || 'Max 30 characters',
+            email: value => {
+                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                return pattern.test(value) || 'Invalid e-mail.'
+                },
+                },
+                rulestel: {
+            required: value => !!value || 'Required.',
+            counter: value => value.length <= 10 || 'Max 10 characters',
+            tel: value => {
+                const pattern = /^[0-9]{10}$/
+                return pattern.test(value) || 'Invalid phone number.'
+                },
+                },
+                rulesssn: {
+            required: value => !!value || 'Required.',
+            counter: value => value.length <= 13 || 'Max 13 characters',
+            ssn: value => {
+                const pattern = /^[0-9]{13}$/
+                return pattern.test(value) || 'Invalid ID card number.'
+                },
+                },
+                show1: false,
+                show2: true,
+                show3: false,
+                show4: false,
+                password: 'Password',
+                rulespass: {
+                required: value => !!value || 'Required.',
+                min: v => v.length >= 8 || 'Min 8 characters',
+                },
+            valid: true,
+            passSame: true
+        }
+    },
+    async mounted () {
+        var userID = localStorage.getItem(server.USERNAME)
+        var result = await api.reprofile(userID)
+        console.log(result)
+        if (result.data.status == "1") {
+            this.account.ssn  = result.data.result.ssn
+            this.account.fname  = result.data.result.fname
+            this.account.lname  = result.data.result.lname
+            this.account.username  = result.data.result.username
+            this.account.password  = result.data.result.password
+            this.account.address  = result.data.result.address
+            this.account.email  = result.data.result.email
+            this.account.phoneNumber  = result.data.result.phoneNumber
+            this.account.birthDay  = result.data.result.birthDay
+            
 
+        }
+    },
+    
+    methods: {
+        onClickProfile () {
+            this.$router.push({name:"refeel"})
+        },
+        onClickSave() {
+            console.log(),
+            this.$router.push({name:"refeel"})
+        },
+        submitEdit () {
+            this.$store.dispatch({ 
+                type: "editprofile",
+                ssn : this.account.ssn,
+                fname : this.account.fname,
+                lname : this.account.lname,
+                username : this.account.username,
+                password : this.account.password,
+                address : this.account.address,
+                email : this.account.email,
+                phoneNumber : this.account.phoneNumber,
+                birthDay : this.account.birthDay,
+            })
+        },
+        validate: function() {
+            if (this.account.password !== this.repassword) {
+                this.$store.dispatch({ type: 'dialog', state: true, msg: "Your Password doesn't match!" })
+                this.passSame = false
+            } else {
+              this.passSame = true
+            }
+        }
+    }
 }
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
+<style scoped>
+.main {
+    min-height: 100vh;
+    background: url(../assets/home.svg) ;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 145%;
+}
+.cardBody {
+    /* min-width: 1000px; */
+    margin-top: 10px;
+    background-color: #454545;
+    border-radius: 30px;
+    padding: 20px;
+    /* min-width: 40vw; */
+    /* height: 60vh;
+    width: 80vw; */
+    /* justify-content: ; */
 }
 
-/* Colors */
-
-:root {
-    --darkbrown-color: #2C2626;
-    --lightbrown-color: #434343;
-    --lightgray-color: #C4C4C4;
-
-    --signinbtn-color: #A3DD80;
-    --signupbtn-color: #BE6C6C;
-
-    --blackhover-color: #000000;
+.logoTitle{
+    display: flex;
+    justify-content: flex-end;
 }
 
-.container {
-    max-width: 1520px;
-    max-height: 740px;
-    margin: 0 auto;
+.cancel {
+    color: #ED8C8C;
+    margin-right: 20px;
 }
 
-header {
-    width: 1536px;
-    height: 753px;
-    background: url(../assets/home.svg) no-repeat;
+.save {
+    color: #95E7EE;
 }
 
-/* .bar {
-    height: 20px;
-} */
-
-/* .logo .navlogo {
-    height: 8px;
-} */
-
-/* .logo {
-    margin-top: 0px;
-    margin-left: 518px;
-    width: 500px;
-    height: 120px;
-    left: 629px;
-    top: 38px;
-
+.add {
+    display: flex;
+    justify-content: flex-end;
+}
+/* .mainbg {
     background: #454545;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 50px;
-}
-
-.logo a {
-    margin-left: 25px;
 } */
-
-.background {
-    margin-top: 50px;
-    margin-left: 117.5px;
-    
-    width: 1275px;
-    height: 575px;
-    left: 168px;
-    top: 247px;
-    /* border: 1px solid red; */
-    /* display: flex; */
-
-    background: #454545;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
-    border-radius: 20px;
-}
-
-.name-title {
-    margin-left: 50px;
-}
-
-.name-title input {
-
-    width: 300px;
-    height: 60px;
-    left: 205px;
-    top: 525px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.lastname-title input {
-    width: 300px;
-    height: 60px;
-    left: 616px;
-    top: 525px;
-    
-    /* margin-right: 100px; */
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.id-title input {
-    margin-right: 50px;
-
-    width: 500px;
-    height: 60px;
-    left: 1027px;
-    top: 525px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.birth-title {
-    margin-left: 50px;
-}
-
-.birth-title input {
-    width: 300px;
-    height: 60px;
-    left: 205px;
-    top: 684px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.address-title input {
-    width: 500px;
-    height: 60px;
-    left: 607px;
-    top: 684px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.tel-title input {
-    width: 300px;
-    height: 60px;
-    left: 1297px;
-    top: 684px;
-    
-    margin-right: 50px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.mail-title {
-    margin-left: 50px;
-}
-
-.mail-title input {
-    width: 300px;
-    height: 60px;
-    left: 200px;
-    top: 843px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.user-title input {
-    width: 300px;
-    height: 60px;
-    left: 611px;
-    top: 843px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.pass-title input {
-    width: 235px;
-    height: 60px;
-    left: 1032px;
-    top: 843px;
-
-    font-size: 25px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-.repass-title input {
-    width: 235px;
-    height: 60px;
-    left: 1032px;
-    top: 843px;
-
-    font-size: 25px;
-
-    margin-right: 50px;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-}
-
-
-.cancel-btn a {
-
-    text-align: center;
-    width: 200px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-top: 10px;
-    margin-left: 800px;
-
-    background: #ED8C8C;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 50px;
-    color: black;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 36px;
-}
-
-.save-btn a {
-
-    text-align: center;
-    width: 200px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-top: 10px;
-    margin-left: 20px;
-
-    background: #95E7EE;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 50px;
-    color: black;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 36px;
-}
-
-.btn {
-    display: flex;
-}
-
-
-.name {
-    display: flex;
-    justify-content: space-between;
-}
-
-.birth {
-    display: flex;
-    justify-content: space-between;
-}
-
-.mail {
-    display: flex;
-    justify-content: space-between;
-}
-
-.top {
-    margin-left: 47.5px;
-    text-decoration: none;
-    
-    color: white;
-    display: flex;
-    /* align-items: center; */
-}
-
-.top2 {
-    margin-left: 47.5px;
-    text-decoration: none;
-    font-size: 12px;
-    color: white;
-    align-items: left;
-    text-align: left;
-    
-    margin-left: 1069px;
-}
-
-.background h1 {
+label, h1, h4 {
     color: white;
 }
 
-.top a {
-    width: 130px;
-    height: 130px;
 
-    border-radius: 200px;
-    margin-left: 770px;
-
-    background: #C4C4C4;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-}
-
-.top h2 {
-    margin-top: 30px;
-    font-size: 55px;
-}
-
-.desktop-nav {
-    height: 85px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--darkbrown-color);
-    padding: 2px 68px;
-
-    
-}
-
-/* .desktop-nav .nav .menu-item {
-    position: absolute;
-    left: 950px;
-    display: flex;
-    list-style: none;
-}
-
-.desktop-nav .nav .menu-item {
-    margin: 0 20px ;
-}
-
-.desktop-nav nav .menu-item a {
-    text-decoration: none;
-    color: #ffffff;
-    font-size: 18px;
-    position: relative;
-
-}
-
-.desktop-nav .nav .menu-item a.active::after {
-    content: "";
-    position: absolute;
-    height: 5px;
-    width: 100%;
-    background: #ffffff;
-    left: 0;
-    top: -20px;
-} */
-
-/* Dropdown Res */
-.nav {
-    /* float: left; */
-    /* overflow: hidden; */
-    background-color: var(--darkbrown-color);
-    width: 330px;
-    align-items: inherit;
-    margin-left: 560px;
-}
-
-/* Link inside nav */
-.nav  a {
-    float: left;
-    font-size: 18px;
-    color: #ffffff;
-    text-align: center;
-    padding: 16px 18px;
-    text-decoration: none;
-    
-}
-
-/* Home active */
-.nav  a.active::after {
-    content: "";
-    /* position: absolute; */
-    height: 5px;
-    width: 100%;
-    background: #ffffff;
-    left: 0;
-    top: -20px;
-}
-
-/* Dropdown container */
-.dropdown {
-    float: left;
-    overflow: hidden;
-}
-
-/* Dropdown btn */
-.dropdown .rdropbtn {
-    font-size: 18px;
-    border: none;
-    outline: none;
-    color: #ffffff;
-    padding: 14px 16px;
-    background-color: inherit;
-    font-family: inherit;
-    margin: 0;
-}
-
-/* Add black bg color to nav */
-.nav a:hover, .dropdown:hover .rdropbtn {
-    background-color: var(--lightbrown-color);
-    border-radius: 20px;
-}
-
-/* Dropdown content */
-.dropdown-res {
-    display: none;
-    position: absolute;
-    background-color: #dddddd;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    border-radius: 20px;
-}
-
-/* Link Inside Dropdown */
-.dropdown-res a {
-    float: none;
-    color: #000000;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-}
-
-/* Add grey background color to dropdown */
-.dropdown-res a:hover {
-    background-color: var(--lightgray-color);
-    border-radius: 20px;
-}
-
-/* Show dropdown menu on hover */
-.dropdown:hover .dropdown-res {
-    display: block;
-}
-
-.bgpic {
-    
-    margin-right: -20px; 
-    width: 51px;
-    height: 51px;
-    background: #ffffff;
-    border-radius: 50px;
-    
-}
-
-.bgpic .cuspic {
-    margin-top: 10px;
-    margin-left: 10px;
-}
-
-/* Customer dropdown */
-.dropdown1 {
-    float: left;
-    overflow: hidden;
-}
-
-/* Dropdown btn */
-.dropdown1 .cdropbtn {
-    font-size: 18px;
-    border: none;
-    outline: none;
-    color: #ffffff;
-    padding: 16px 18px;
-    background-color: inherit;
-    margin: 0px;
-}
-
-/* Add bg color to cus btn */
-.dropdown1:hover .cdropbtn {
-    background-color: var(--lightbrown-color) ;
-    border-radius: 20px;
-}
-
-/* Dropdown content */
-.dropdown-cus {
-    display: none;
-    position: absolute;
-    background-color: #dddddd;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    border-radius: 20px;
-}
-
-/* Link inside Dropdown */
-.dropdown-cus a {
-    float: none;
-    color: #000000;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-    
-}
-
-/* dropdown cus hover */
-.dropdown-cus a:hover{
-    background-color: var(--lightgray-color);
-    border-radius: 20px;
-}
-
-/* Show menu on hover */
-.dropdown1:hover .dropdown-cus {
-    display: block;
-}
 </style>
