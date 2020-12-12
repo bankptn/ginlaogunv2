@@ -5,8 +5,8 @@ from sqlalchemy import func
 session = initDatabase()
 
 class Account():
-    def create(self, ssn, fname, lname, username, password, address, email, phoneNumber, birthDay):
-        account = ACCOUNT(ssn=ssn, fname=fname, lname=lname, username=username, password=password, address=address, email=email, phoneNumber=phoneNumber, birthDay=birthDay)
+    def create(self, ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, profilePic):
+        account = ACCOUNT(ssn=ssn, fname=fname, lname=lname, username=username, password=password, address=address, email=email, phoneNumber=phoneNumber, birthDay=birthDay, profilePic=profilePic)
         session.add(account)
         session.commit()
         log = {
@@ -36,7 +36,7 @@ class Account():
             }
             return log
 
-    def update(self, ssn, fname, lname, username, password, address, email, phoneNumber, birthDay):
+    def update(self, ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, profilePic):
         account = session.query(ACCOUNT)
         account = account.filter(ACCOUNT.ssn==ssn)
         if account.scalar() is not None :
@@ -49,6 +49,7 @@ class Account():
             account.email = email
             account.phoneNumber = phoneNumber
             account.birthDay = birthDay
+            account.profilePic = profilePic
             session.commit()
             log = {
                 "result":"",
@@ -94,14 +95,14 @@ class Account():
         }
         return log
 
-    def register(self, ssn, fname, lname, username, password, address, email, phoneNumber, birthDay):
+    def register(self, ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, profilePic):
         account = session.query(ACCOUNT)
         accountSSN = account.filter(ACCOUNT.ssn==ssn)
         accountUSERNAME = account.filter(ACCOUNT.username==username)
 
         if accountSSN.scalar() is None:
             if accountUSERNAME.scalar() is None:
-                logs =  self.create(ssn, fname, lname, username, password, address, email, phoneNumber, birthDay)
+                logs =  self.create(ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, profilePic)
                 return logs
             else:
                 log = {
@@ -157,4 +158,5 @@ class Account():
             'email': customer.email,
             'phoneNumber': customer.phoneNumber,
             'birthDay': customer.birthDay,
+            'pic': customer.profilePic
         }
