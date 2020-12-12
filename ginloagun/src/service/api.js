@@ -1,7 +1,9 @@
 import * as accountAPI from "../service/api_account"
-import * as restaurant from "../service/api_restaurant"
+import * as restaurantAPI from "../service/api_restaurant"
+import * as reservationAPI from "../service/api_reservation"
 
 export default {
     ...accountAPI,
-    ...restaurant
+    ...restaurantAPI,
+    ...reservationAPI
 };
