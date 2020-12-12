@@ -5,7 +5,7 @@ session = initDatabase()
 
 class Reservation():
     def create(self, ssn, rid, createDate, tableAmount, detail):
-        reservation = RESERVATION(ssn=ssn, rid=rid, createDate=createDate, tableAmount=tableAmount, detail=detail)
+        reservation = RESERVATION(ssn=ssn, rid=rid, createDate=createDate, tableAmount=int(tableAmount), detail=detail)
         session.add(reservation)
         session.commit()
         log = {
@@ -40,7 +40,7 @@ class Reservation():
         if reservation.scalar() is not None :
             reservation = reservation.one()
             reservation.createDate = createDate
-            reservation.tableAmount = tableAmount
+            reservation.tableAmount = int(tableAmount)
             reservation.detail = detail
             session.commit()
             log = {
