@@ -135,7 +135,7 @@ class Account():
                 log = {
                     "result":"",
                     "msg":"Password is wrong",
-                    "status":"1"
+                    "status":"100"
                 }
                 return log
         else:
@@ -156,4 +156,5 @@ class Account():
             'address': customer.address,
             'email': customer.email,
             'phoneNumber': customer.phoneNumber,
+            'birthDay': customer.birthDay,
         }
