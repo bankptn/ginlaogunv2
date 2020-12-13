@@ -14,7 +14,8 @@ class ACCOUNT(Base):
     address = Column('address', sa.String(50) )
     email = Column('email', sa.String(30) )
     phoneNumber = Column('phoneNumber', sa.String(15) )
-    birthDay = Column('birthDay', sa.String(15) )
+    birthDay = Column('birthDay', sa.String(20) )
+    profilePic = Column('pic', sa.String(120))
 
 class RESTAURANT(Base):
     __tablename__ = 'RESTAURANT'
@@ -36,6 +37,6 @@ class RESERVATION(Base):
     __tablename__ = 'RESERVATION'
     ssn = Column('ssn', ForeignKey('ACCOUNT.ssn') ,primary_key=True)
     rid = Column('rid', ForeignKey('RESTAURANT.rid') ,primary_key=True)
-    createDate = Column('createDate', sa.String(15) ,primary_key=True)
+    createDate = Column('createDate', sa.String(20) ,primary_key=True)
     tableAmount = Column('tableAmount', sa.Integer() )
     detail = Column('detail', sa.String(50) )

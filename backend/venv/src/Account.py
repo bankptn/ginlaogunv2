@@ -6,7 +6,7 @@ session = initDatabase()
 
 class Account():
     def create(self, ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, profilePic):
-        account = ACCOUNT(ssn=ssn, fname=fname, lname=lname, username=username, password=password, address=address, email=email, phoneNumber=phoneNumber, birthDay=birthDay ,profilePic=profilePic)
+        account = ACCOUNT(ssn=ssn, fname=fname, lname=lname, username=username, password=password, address=address, email=email, phoneNumber=phoneNumber, birthDay=birthDay, profilePic=profilePic)
         session.add(account)
         session.commit()
         log = {
@@ -158,5 +158,5 @@ class Account():
             'email': customer.email,
             'phoneNumber': customer.phoneNumber,
             'birthDay': customer.birthDay,
-            'profilePic': customer.profilePic
+            'pic': customer.profilePic
         }
