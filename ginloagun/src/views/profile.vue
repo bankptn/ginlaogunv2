@@ -164,7 +164,7 @@ export default {
     name:"profile",
     methods: {
         onClickEdit () {
-                this.$router.push({name:"edit"})
+            this.$router.push({name:"edit"})
             },
         onClickHome () {
             this.$router.push({name:"home"})

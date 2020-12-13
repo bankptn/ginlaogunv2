@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import api from "../service/api";
 import { server } from "../service/constants"; 
-// import router from "@/router";
+import router from "@/router";
 
 Vue.use(Vuex)
 
@@ -57,6 +57,7 @@ export default new Vuex.Store({
         commit("SET_LOGIN_STATE", true)
         commit("SET_NAV_BARDEFAULT_STATE", false)
         commit("SET_LOADING_STATE", false)
+        router.push({name:"home"})
       } else {
         commit("SET_LOGIN_STATE", false)
         commit("SET_NAV_BARDEFAULT_STATE", true)
@@ -68,6 +69,7 @@ export default new Vuex.Store({
       localStorage.removeItem(server.USERNAME);
       commit("SET_LOGIN_STATE", false)
       commit("SET_NAV_BARDEFAULT_STATE", true)
+      router.push({name:"home"})
     },
     restoreLogin ({ commit }) {
       var result = localStorage.getItem(server.USERNAME)
@@ -88,9 +90,11 @@ export default new Vuex.Store({
       var result = await api.register({ ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, pic })
       if (result.data.status == "1") {
         commit("SET_LOADING_STATE", false)
+        router.push({name:"login"})
       } else {
         commit("SET_LOADING_STATE", false)
         dispatch({ type: 'dialog', state: true, msg: result.data.msg })
+        router.push({name:"login"})
       }
     },
     async editprofile ({ commit, dispatch }, { ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, pic }) {
@@ -108,9 +112,11 @@ export default new Vuex.Store({
       var result = await api.createReservation({ ssn, rid, createDate, tableAmount, detail })
       if (result.data.status == "1") {
         commit("SET_LOADING_STATE", false)
+        router.push({name:"home"})
       } else {
         commit("SET_LOADING_STATE", false)
         dispatch({ type: 'dialog', state: true, msg: result.data.msg })
+        router.push({name:"home"})
       }
     },
   },

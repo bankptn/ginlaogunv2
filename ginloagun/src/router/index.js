@@ -8,7 +8,6 @@ import profile from '../views/profile.vue'
 import login from '../views/login.vue'
 import refeel from '../views/refeel.vue'
 import reserve from '../views/reserve.vue'
-import navbar from '../components/core/navbar-signin.vue'
 
 Vue.use(VueRouter)
 
@@ -21,7 +20,10 @@ const routes = [
   {
     path: '/edit',
     name: 'edit',
-    component: edit
+    component: edit,
+    meta: {
+      isSecured: true
+    }
   },
   {
     path: '/',
@@ -36,7 +38,10 @@ const routes = [
   {
     path: '/profile',
     name: 'profile',
-    component: profile
+    component: profile,
+    meta: {
+      isSecured: true
+    }
   },
   {
     path: '/login',
@@ -46,17 +51,18 @@ const routes = [
   {
     path: '/refeel',
     name: 'refeel',
-    component: refeel
+    component: refeel,
+    meta: {
+      isSecured: true
+    }
   },
   {
     path: '/reserve',
     name: 'reserve',
-    component: reserve
-  },
-  {
-    path: '/navbar',
-    name: 'navbar',
-    component: navbar
+    component: reserve,
+    meta: {
+      isSecured: true
+    }
   }
 ]
 
@@ -65,5 +71,18 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(record => record.meta.isSecured)) {
+    var userid = localStorage.getItem("USERNAME")
+    if (userid !== null) {
+      next() 
+    } else {
+      next("/");
+    }
+  } else {
+    next();
+  }
+});
 
 export default router

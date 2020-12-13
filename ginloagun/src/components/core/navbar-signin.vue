@@ -19,10 +19,10 @@
         </v-btn>
 
         <div class="dropdown-res">
-          <a href="/refeel"><span>Refeel Bar & Bistro</span></a>
-          <a href="/refeel"><span>C - minor</span></a>
-          <a href="/refeel"><span>Zyn music bar & hashery</span></a>
-          <a href="/refeel"><span>2gether bar & restaurant</span></a>
+          <a href="/refeel?rid=r000000001"><span>Refeel Bar & Bistro</span></a>
+          <a href="/refeel?rid=r000000004"><span>C - minor</span></a>
+          <a href="/refeel?rid=r000000002"><span>Zyn music bar & hashery</span></a>
+          <a href="/refeel?rid=r000000003"><span>2gether bar & restaurant</span></a>
         </div>
       </div>
       
@@ -48,6 +48,24 @@
 export default {
   data: () => ({
     items: ["Foo", "Bar", "Fizz", "Buzz"],
+    bars:[
+              {
+                  id:"1",
+                  name:"Refeel Bar & Bistro",
+              },
+              {
+                  id:"2",
+                  name:"C-minor",
+              },
+              {
+                  id:"3",
+                  name:"Zyn music bar & hashery",
+              },
+              {
+                  id:"4",
+                  name:"2gether bar & restaurant",
+              }
+          ]
   }),
   methods: {
     onClickLogout () {
