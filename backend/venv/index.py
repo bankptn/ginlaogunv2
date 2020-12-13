@@ -31,8 +31,7 @@ def createAccount():
     email = request.form['email']
     phoneNumber = request.form['phoneNumber']
     birthDay = request.form['birthDay']
-    profilePic = request.form['profilePic']
-
+    profilePic = request.form['pic']
     log = Account.create(ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, profilePic)
     return jsonify(log)
 
@@ -64,8 +63,7 @@ def updateAccount():
     email = request.form['email']
     phoneNumber = request.form['phoneNumber']
     birthDay = request.form['birthDay']
-    profilePic = request.form['profilePic']
-
+    profilePic = request.form['pic']
     log = Account.update(ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, profilePic)
     return jsonify(log)
 
@@ -89,8 +87,7 @@ def register():
     email = request.form['email']
     phoneNumber = request.form['phoneNumber']
     birthDay = request.form['birthDay']
-    profilePic = request.form['profilePic']
-
+    profilePic = request.form['pic']
     log = Account.register(ssn, fname, lname, username, password, address, email, phoneNumber, birthDay, profilePic)
     return jsonify(log)
 
