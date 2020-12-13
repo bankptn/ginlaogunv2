@@ -1,6 +1,15 @@
 import httpClient from "@/service/httpClient";
-import { apiUrl } from "@/service/constants";
+import { apiUrl, server } from "@/service/constants";
 
+export const createReservation = async (values) => {
+    var bodyFormData = new FormData();
+    bodyFormData.append("ssn", values.ssn);
+    bodyFormData.append("rid", values.rid);
+    bodyFormData.append("createDate", values.createDate);
+    bodyFormData.append("tableAmount", values.tableAmount);
+    bodyFormData.append("detail", values.detail);
+    var result = await httpClient.post(server.RESERVATION, bodyFormData);
+  
 export const getRemainTableByrid = async (rid) => {
     var result = await httpClient.get(apiUrl+ "/" + "getRemainTable" + "/" + rid);
     return result
